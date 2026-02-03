@@ -16,6 +16,38 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    role: {
+        type: String,
+        enum: ["admin", "personel"],
+        default: "personel"
+    },
+    financials: {
+        salary: {
+            type: Number,
+            default: 0
+        },
+        salaryType: {
+            type: String,
+            enum: ["monthly", "weekly"],
+            default: "monthly"
+        },
+        insurance: {
+            type: Number,
+            default: 0
+        },
+        benefits: {
+            type: Number,
+            default: 0
+        },
+        transport: {
+            type: Number,
+            default: 0
+        },
+        overtime: {
+            type: Number,
+            default: 0
+        }
+    },
     resetPasswordToken: String,
     resetPasswordExpires: Date
 }, { timestamps: true });

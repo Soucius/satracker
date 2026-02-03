@@ -7,6 +7,8 @@ import SignupPage from "./pages/SignupPage";
 import SigninPage from "./pages/SigninPage";
 import DashboardPage from "./pages/DashboardPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import UsersPage from "./pages/UsersPage";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 function App() {
   return (
@@ -54,10 +56,13 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <DashboardPage />
+              <DashboardLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<DashboardPage />} />
+          <Route path="users" element={<UsersPage />} />
+        </Route>
       </Routes>
     </div>
   );

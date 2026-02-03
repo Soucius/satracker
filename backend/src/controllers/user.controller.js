@@ -38,9 +38,43 @@ export async function getUserById(req, res) {
     }
 }
 
+export async function getPersonnelStats(_, res) {
+    try {
+        const users = await User.find();
+        
+        let totalUsers = users.length;
+        let totalMonthlyCost = 0;
+        let totalWeeklyCost = 0;
+
+        users.forEach(user => {
+            const f = user.financials || {};
+            const salary = f.salary || 0;
+            const extras = (f.insurance || 0) + (f.benefits || 0) + (f.transport || 0) + (f.overtime || 0);
+            
+            if (f.salaryType === 'monthly') {
+                totalMonthlyCost += salary + extras;
+                totalWeeklyCost += (salary + extras) / 4; // Yaklaşık
+            } else {
+                totalWeeklyCost += salary + (extras / 4); 
+                totalMonthlyCost += (salary * 4) + extras;
+            }
+        });
+
+        res.status(200).json({
+            totalUsers,
+            totalMonthlyCost,
+            totalWeeklyCost,
+        });
+    } catch (error) {
+        console.error("Stats error:", error);
+
+        res.status(500).json({ message: "İstatistikler alınamadı." });
+    }
+}
+
 export async function createUser(req, res) {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, role, financials } = req.body;
 
         if (!username || !email || !password) {
             return res.status(400).json({ message: "Lütfen tüm alanları doldurun." });
@@ -49,7 +83,9 @@ export async function createUser(req, res) {
         const newUser = new User({
             username,
             email,
-            password
+            password,
+            role: role || "personel",
+            financials: financials || {}
         });
 
         const savedUser = await newUser.save();
@@ -70,26 +106,25 @@ export async function createUser(req, res) {
 export async function updateUser(req, res) {
     try {
         const userId = req.params.id;
-        const updateData = req.body;
+        let updateData = { ...req.body };
 
-        if (updateData.password !== "") {
+        if (!updateData.password || updateData.password.trim() === "") {
+            delete updateData.password;
+        } else {
             const salt = await bcrypt.genSalt(10);
             updateData.password = await bcrypt.hash(updateData.password, salt);
-        } else {
-            delete updateData.password;
         }
 
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
 
         if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "Kullanıcı bulunamadı" });
         }
 
         res.status(200).json(updatedUser);
     } catch (error) {
         console.error("Error updating user: ", error);
-        
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Sunucu hatası oluştu." });
     }
 }
 
