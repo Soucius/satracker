@@ -15,22 +15,22 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 }, { timestamps: true });
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
     if (!this.isModified("password")) {
-        return next();
+        return;
     }
 
     try {
         const salt = await bcrypt.genSalt(10);
 
         this.password = await bcrypt.hash(this.password, salt);
-
-        next();
     } catch (error) {
-        next(error);
+        return error;
     }
 });
 

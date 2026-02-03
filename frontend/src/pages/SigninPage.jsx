@@ -4,19 +4,15 @@ import api from "../libs/axios";
 import toast from "react-hot-toast";
 import { Eye, EyeOff, Loader2, CircleAlert } from "lucide-react";
 
-const SignupPage = () => {
+const SigninPage = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,14 +24,8 @@ const SignupPage = () => {
     e.preventDefault();
     setError("");
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Şifreler eşleşmiyor.");
-
-      return;
-    }
-
-    if (!formData.username || !formData.email || !formData.password) {
-      setError("Lütfen tüm alanları doldurun.");
+    if (!formData.email || !formData.password) {
+      setError("Lütfen e-posta ve şifrenizi girin.");
 
       return;
     }
@@ -43,9 +33,9 @@ const SignupPage = () => {
     setLoading(true);
 
     try {
-      const response = await api.post("/users", formData);
+      const response = await api.post("/users/signin", formData);
 
-      toast.success("Kayıt başarıyla tamamlandı! Giriş yapılıyor...");
+      toast.success("Giriş başarılı! Yönlendiriliyorsunuz...");
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -54,22 +44,21 @@ const SignupPage = () => {
         navigate("/");
       }, 1000);
     } catch (err) {
-      console.error("Signup error:", err);
+      console.error("Login error:", err);
 
       const message =
         err.response?.data?.message ||
-        "Bir hata oluştu. Lütfen tekrar deneyin.";
+        "Giriş yapılamadı. Bilgilerinizi kontrol edin.";
 
       setError(message);
+
       toast.error(message);
     } finally {
       setLoading(false);
 
       setFormData({
-        username: "",
         email: "",
         password: "",
-        confirmPassword: "",
       });
     }
   };
@@ -79,11 +68,10 @@ const SignupPage = () => {
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-slate-100">
         <div className="text-center">
           <h2 className="mt-2 text-3xl font-extrabold text-slate-900 tracking-tight">
-            Hesap Oluşturun
+            Tekrar Hoş Geldiniz
           </h2>
-
           <p className="mt-2 text-sm text-slate-500">
-            <b>Satracker</b> sistemine hoş geldiniz.
+            Hesabınıza erişmek için bilgilerinizi girin.
           </p>
         </div>
 
@@ -99,26 +87,6 @@ const SignupPage = () => {
           <div className="space-y-4">
             <div>
               <label
-                htmlFor="username"
-                className="block text-sm font-medium text-slate-700"
-              >
-                Kullanıcı Adı
-              </label>
-
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                className="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ease-in-out sm:text-sm"
-                placeholder="Örn: ahmetyilmaz"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label
                 htmlFor="email"
                 className="block text-sm font-medium text-slate-700"
               >
@@ -129,6 +97,7 @@ const SignupPage = () => {
                 id="email"
                 name="email"
                 type="email"
+                autoComplete="email"
                 required
                 className="mt-1 block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ease-in-out sm:text-sm"
                 placeholder="ornek@kurum.com"
@@ -138,63 +107,43 @@ const SignupPage = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-slate-700"
-              >
-                Şifre
-              </label>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Şifre
+                </label>
+
+                <div className="text-sm">
+                  <Link
+                    to="/forgot-password"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    Şifrenizi mi unuttunuz?
+                  </Link>
+                </div>
+              </div>
 
               <div className="relative mt-1">
                 <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
                   required
                   className="block w-full px-4 py-3 pr-12 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ease-in-out sm:text-sm"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
                 >
                   {showPassword ? (
-                    <EyeOff className="size-5" />
-                  ) : (
-                    <Eye className="size-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-slate-700"
-              >
-                Şifre Tekrar
-              </label>
-
-              <div className="relative mt-1">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  required
-                  className="block w-full px-4 py-3 pr-12 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 ease-in-out sm:text-sm"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
-                >
-                  {showConfirmPassword ? (
                     <EyeOff className="size-5" />
                   ) : (
                     <Eye className="size-5" />
@@ -218,22 +167,22 @@ const SignupPage = () => {
                 <div className="flex items-center gap-2">
                   <Loader2 className="size-5 animate-spin" />
 
-                  <span>Kayıt Olunuyor...</span>
+                  <span>Giriş Yapılıyor...</span>
                 </div>
               ) : (
-                "Kayıt Ol"
+                "Giriş Yap"
               )}
             </button>
           </div>
 
           <div className="text-center text-sm">
-            <span className="text-slate-500">Zaten bir hesabınız var mı? </span>
+            <span className="text-slate-500">Hesabınız yok mu? </span>
 
             <Link
-              to="/signin"
+              to="/signup"
               className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
             >
-              Giriş Yap
+              Hemen Kayıt Olun
             </Link>
           </div>
         </form>
@@ -242,4 +191,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default SigninPage;
