@@ -4,6 +4,7 @@ import cors from "cors";
 import { connectDB } from "./libs/db.js";
 import userRoutes from "./routes/user.routes.js";
 import customerRoutes from "./routes/customer.routes.js";
+import supplierRoutes from "./routes/supplier.routes.js";
 
 const app = express();
 const PORT = ENV.PORT || 5000;
@@ -16,6 +17,7 @@ app.use(cors({
 }));
 app.use("/api/users", userRoutes);
 app.use("/api/customers", customerRoutes);
+app.use("/api/suppliers", supplierRoutes);
 
 connectDB().then(() => {
     app.listen(PORT, () => {

@@ -10,6 +10,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import UsersPage from "./pages/UsersPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 import CustomersPage from "./pages/CustomersPage";
+import SuppliersPage from "./pages/SuppliersPage";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
           <Route index element={<DashboardPage />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="customers" element={<CustomersPage />} />
+          <Route path="suppliers" element={<SuppliersPage />} />
         </Route>
       </Routes>
     </div>

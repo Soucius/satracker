@@ -3,10 +3,11 @@ import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
-  Settings,
+  Truck,
   LogOut,
   ChevronLeft,
   ChevronRight,
+  UserRound,
   Building2,
   Bell,
   X,
@@ -54,8 +55,8 @@ const DashboardLayout = () => {
   const menuItems = [
     { name: "Genel Bakış", path: "/dashboard", icon: LayoutDashboard },
     { name: "Personel Yönetimi", path: "/dashboard/users", icon: Users },
-    { name: "Müşteri Yönetimi", path: "/dashboard/customers", icon: Building2 },
-    { name: "Sistem Ayarları", path: "/system", icon: Settings },
+    { name: "Müşteri Yönetimi", path: "/dashboard/customers", icon: UserRound },
+    { name: "Tedarikçi Yönetimi", path: "/dashboard/suppliers", icon: Truck },
   ];
 
   return (
