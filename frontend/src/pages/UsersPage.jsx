@@ -9,7 +9,6 @@ import {
   Users,
   Wallet,
   CalendarClock,
-  DollarSign,
   X,
 } from "lucide-react";
 
@@ -428,10 +427,9 @@ const UsersPage = () => {
                     </label>
 
                     <div className="relative">
-                      <DollarSign
-                        size={16}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                      />
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">
+                        ₺
+                      </span>
 
                       <input
                         type="number"

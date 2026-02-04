@@ -5,8 +5,8 @@ import { createUser, deleteUser, forgotPassword, getAllUsers, getPersonnelStats,
 const router = express.Router();
 
 router.get("/", protect, getAllUsers);
-router.get("/:id", protect, getUserById);
 router.get("/stats", protect, getPersonnelStats);
+router.get("/:id", protect, getUserById);
 router.post("/", createUser);
 router.post("/signin", login);
 router.post("/forgot-password", forgotPassword);
