@@ -54,7 +54,7 @@ const DashboardLayout = () => {
   const menuItems = [
     { name: "Genel Bakış", path: "/dashboard", icon: LayoutDashboard },
     { name: "Personel Yönetimi", path: "/dashboard/users", icon: Users },
-    { name: "Kurum Ayarları", path: "/settings", icon: Building2 },
+    { name: "Müşteri Yönetimi", path: "/dashboard/customers", icon: Building2 },
     { name: "Sistem Ayarları", path: "/system", icon: Settings },
   ];
 
