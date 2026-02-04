@@ -11,6 +11,7 @@ import {
   Building2,
   Bell,
   X,
+  Receipt,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -57,6 +58,7 @@ const DashboardLayout = () => {
     { name: "Personel Yönetimi", path: "/dashboard/users", icon: Users },
     { name: "Müşteri Yönetimi", path: "/dashboard/customers", icon: UserRound },
     { name: "Tedarikçi Yönetimi", path: "/dashboard/suppliers", icon: Truck },
+    { name: "Gider Yönetimi", path: "/dashboard/expenses", icon: Receipt },
   ];
 
   return (
