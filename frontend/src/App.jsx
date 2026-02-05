@@ -12,6 +12,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import CustomersPage from "./pages/CustomersPage";
 import SuppliersPage from "./pages/SuppliersPage";
 import ExpensesPage from "./pages/ExpensesPage";
+import OrdersPage from "./pages/OrdersPage";
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
           <Route path="customers" element={<CustomersPage />} />
           <Route path="suppliers" element={<SuppliersPage />} />
           <Route path="expenses" element={<ExpensesPage />} />
+          <Route path="orders" element={<OrdersPage />} />
         </Route>
       </Routes>
     </div>
